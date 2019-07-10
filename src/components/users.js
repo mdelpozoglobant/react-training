@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Header = ({titles}) => {
     return (
@@ -18,8 +19,8 @@ const Row = ({user, number, onRemove}) => {
             <td>{user.surname}</td>
             <td>{user.email}</td>
             <td>
-                <button onClick={(e) => onRemove(user.id) }>Delete</button>
-                <button>Edit</button>
+                <button className="button is-small is-danger" onClick={(e) => onRemove(user.id) }>Delete</button>
+                <Link className="button is-small is-info" to={"/users/" + user.id}>Edit</Link>
             </td>
         </tr>
     )
@@ -32,8 +33,8 @@ const Users = ({ data: users, onRemove }) => {
 
     return (
         <div>
-            <h2>User List</h2>
-            <table>
+            <h2 className="has-text-centered is-size-3 m-1">User List</h2>
+            <table className="table is-striped is-hoverable is-fullwidth">
                 <Header titles={titles} />
                 <tbody>
                     {users.map((user, idx) => {
