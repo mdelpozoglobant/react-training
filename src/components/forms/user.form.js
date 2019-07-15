@@ -21,7 +21,7 @@ function Input(props) {
 	);
 }
 
-class UserForm extends React.Component {
+class UserForm extends Component {
 	BASE_URL = 'http://localhost:4000';
 	API = 'users';
 	state = {

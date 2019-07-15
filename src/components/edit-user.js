@@ -1,27 +1,23 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import UserForm from './forms/user.form';
 
-class EditUser extends React.Component {
-	BASE_URL = 'http://localhost:4000';
-	API = 'users';
+const EditUser = (props) => {
+    const id = props.match.params.userId;
+    const BASE_URL = 'http://localhost:4000';
+    const API = 'users';
 
-	state = {
-		user: null
-	}
+    let [ user, setUser ] = useState(null);
 
-	componentDidMount() {
-		const id = this.props.match.params.userId;
-
-		fetch(`${this.BASE_URL}/${this.API}/${id}`)
+    useEffect(() => {
+        fetch(`${BASE_URL}/${API}/${id}`)
 			.then(res => res.json())
 			.then(user => {
-				this.setState({ user });
+				setUser(user);
 			});
-	}
-
-	updateUser = (user) => {
-		console.log(user);
-		fetch(`${this.BASE_URL}/${this.API}/${user.id}`, {
+	}, []);
+	
+	const updateUser = (user) => {
+		fetch(`${BASE_URL}/${API}/${user.id}`, {
 			method: 'put',
 			body: JSON.stringify(user),
 			headers: {
@@ -29,26 +25,24 @@ class EditUser extends React.Component {
 			}
 		}).then(res => res.json())
 			.then(data => {
-				this.props.history.goBack();
+				props.history.goBack();
 			});
 	};
 
-	render() {
-		return (
-			<div className="container">
-				<div className="column is-10 is-offset-1">
-					<h2 className="subtitle is-3 has-text-centered">Edit User</h2>
-					<div className="container">
-						<div className="columns">
-							<div className="column is-8 is-offset-2">
-								<UserForm title="Edit" history={this.props.history} user={this.state.user} completedForm={this.updateUser} />
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		)
-	}
-}
+    return (
+        <div className="container">
+            <div className="column is-10 is-offset-1">
+                <h2 className="subtitle is-3 has-text-centered">Edit User</h2>
+                <div className="container">
+                    <div className="columns">
+                        <div className="column is-8 is-offset-2">
+                            <UserForm title="Edit" history={props.history} user={user} completedForm={updateUser} />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
 
 export default EditUser;
