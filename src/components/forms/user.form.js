@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useRef, useEffect } from 'react';
 import User from '../models/user';
 
 import PropTypes from 'prop-types';
@@ -6,16 +6,23 @@ import PropTypes from 'prop-types';
 function Input(props) {
 	const { attributes, handleChange } = props;
 	const { name, value, hasError, required } = attributes;
+	const inputRef = useRef(null);
 
 	let labelClassName = 'label';
 
 	labelClassName += hasError ? ' is-danger' : '';
 
+	useEffect(() => {
+		if (inputRef.current.name === 'name') {
+			inputRef.current.focus();
+		}
+	}, []);
+
 	return (
 		<div className="field">
 			<div className="control">
 				<label className={labelClassName}>{name} </label>
-				<input type="text" className="input" name={name} value={value} required={required} onChange={handleChange} />
+				<input ref={inputRef} type="text" className="input" name={name} value={value} required={required} onChange={handleChange} />
 			</div>
 		</div>
 	);
@@ -24,6 +31,7 @@ function Input(props) {
 class UserForm extends Component {
 	BASE_URL = 'http://localhost:4000';
 	API = 'users';
+	formRef = React.createRef(null);
 	state = {
 		isInvalid: false,
 		fields: {
@@ -47,6 +55,10 @@ class UserForm extends Component {
 			}
 		}
 	};
+
+	componentDidMount() {
+		// console.log(this.formRef.current);
+	}
 
 	componentDidUpdate(prevProps) {
 		if (this.props.user !== prevProps.user) {
@@ -105,7 +117,7 @@ class UserForm extends Component {
 		const { fields, isInvalid } = this.state;
 		return (
 			<>
-				<form noValidate onSubmit={this.onSubmit} autoComplete="off">
+				<form noValidate onSubmit={this.onSubmit} autoComplete="off" ref={this.formRef}>
 					{
 						Object.keys(fields).map((key, idx) => {
 							return (
