@@ -13,14 +13,6 @@ class Admin extends Component {
         id: -1
     }
 
-    componentDidMount() {
-        fetch(`${this.BASE_URL}/${this.API}`)
-            .then(res => res.json())
-            .then(users => {
-                this.setState({ users })
-            });
-    }
-
     handleRemove = (id) => {
         this.setState({
             isActive: true,
@@ -59,7 +51,7 @@ class Admin extends Component {
             <div className="container">
                 <div className="columns">
                     <div className="column is-10 is-offset-1">
-                        <Users data={this.state.users} onRemove={this.handleRemove} />
+                        <Users />
                         <p className="has-text-centered" style={{marginTop: 15}}>
                             <Link to="/users/new" className="button is-info">New User</Link>
                         </p>

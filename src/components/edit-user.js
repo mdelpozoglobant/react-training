@@ -9,12 +9,18 @@ const EditUser = (props) => {
     let [ user, setUser ] = useState(null);
 
     useEffect(() => {
+        // 1. componentDidMount
         fetch(`${BASE_URL}/${API}/${id}`)
 			.then(res => res.json())
 			.then(user => {
 				setUser(user);
-			});
-	}, []);
+            });
+
+        /**
+         * 3. componentWillUnmount
+         * return () => {};
+         */
+	}, []); // 2. componentDidUpdate
 	
 	const updateUser = (user) => {
 		fetch(`${BASE_URL}/${API}/${user.id}`, {
